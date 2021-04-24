@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 
-const Statistic = ({ text, value }) => (
-  <div>
-    {text} {value}
-  </div>
-)
+const Statistic = ({ text, value }) => {
+  return (
+    <>
+      <td>{text}</td>
+      <td>{value}</td>
+    </>
+  )
+}
 
 const Statistics = (props) => {
   const all = props.good + props.neutral + props.bad
   const average = (props.good - props.bad) / all
-  const positive = (props.good / all) * 100
+  const positive = `${(props.good / all) * 100}%`
 
   if (all === 0) {
     return (
@@ -21,12 +24,28 @@ const Statistics = (props) => {
 
   return (
     <div>
-      <Statistic text="good" value={props.good} />
-      <Statistic text="neutral" value={props.neutral} />
-      <Statistic text="bad" value={props.bad} />
-      <Statistic text="all" value={all} />
-      <Statistic text="average" value={average} />
-      <Statistic text="positive" value={positive} />
+      <table>
+        <tbody>
+          <tr>
+            <Statistic text="good" value={props.good} />
+          </tr>
+          <tr>
+            <Statistic text="neutral" value={props.neutral} />
+          </tr>
+          <tr>
+            <Statistic text="bad" value={props.bad} />
+          </tr>
+          <tr>
+            <Statistic text="all" value={all} />
+          </tr>
+          <tr>
+            <Statistic text="average" value={average} />
+          </tr>
+          <tr>
+            <Statistic text="positive" value={positive} />
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }
