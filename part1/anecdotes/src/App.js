@@ -10,18 +10,27 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
   ]
 
-  const getRandomNumber = () => {
+  const handleNext = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length)
     setSelected(randomNumber)
     console.log(randomNumber)
   }
 
+  const handleVote = (selected) => {
+    const newVotes = [ ...votes ]
+    newVotes[selected] += 1
+    setVotes(newVotes)
+  }
+
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   return (
     <div>
       {anecdotes[selected]}
-      <br/><button onClick={getRandomNumber}>next anecdote</button>
+      <br/>has {votes[selected]} votes
+      <br/><button onClick={() => handleVote(selected)}>vote</button>
+      <button onClick={handleNext}>next anecdote</button>
     </div>
   )
 }
