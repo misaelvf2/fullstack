@@ -29,14 +29,7 @@ const App = () => {
 
   const searchPerson = (event) => {
     event.preventDefault()
-    if (search === '') {
-      setPersonsToShow(persons)
-    }
-    else{
-      setPersonsToShow(persons.filter(person =>
-        person.name.toLowerCase() === search.toLowerCase()))
-    }
-    setSearch('')
+    setPersonsToShow(persons.filter(person => person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1))
   }
 
   const addPerson = (event) => {
