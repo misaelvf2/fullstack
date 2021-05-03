@@ -6,7 +6,7 @@ const CountrySearch = (props) => {
     <div>
       <form onSubmit={props.handleSubmit}>
         find countries
-        <input search={props.search} onChange={props.handleSearchChange} />
+        <input value={props.searchTerms} onChange={props.handleSearchChange} />
       </form>
     </div>
   )
@@ -30,25 +30,44 @@ const Country = (props) => {
   )
 }
 
-const SearchResults = ({ countriesToShow }) => {
-  if (countriesToShow.length > 10) {
+const SearchResults = ({ searchResults }) => {
+  const [countryToShow, setCountryToShow] = useState('')
+
+  if (searchResults.length > 10) {
     return (
       <div>
         Too many matches, specify another filter
       </div>
     )
-  } else if (countriesToShow.length > 1 && countriesToShow.length <= 10) {
-    return (
-      <div>
-        {countriesToShow.map(country =>
-          <div key={country.name}>{country.name}</div>
+  } else if (searchResults.length > 1 && searchResults.length <= 10) {
+    if (countryToShow) {
+      return (
+        <div>
+        {searchResults.map(country =>
+          <div key={country.name}>
+            {country.name}
+            <button onClick={() => setCountryToShow(country)}>show</button>
+          </div>
+        )}
+        <Country country={countryToShow} />
+      </div>
+      )
+    } else {
+      return (
+        <div>
+        {searchResults.map(country =>
+          <div key={country.name}>
+            {country.name}
+            <button onClick={() => setCountryToShow(country)}>show</button>
+          </div>
         )}
       </div>
-    )
+      )
+    }
   } else {
     return (
       <div>
-        {countriesToShow.map(country =>
+        {searchResults.map(country =>
           <Country key={country.name} country={country} />
         )}
       </div>
@@ -58,8 +77,8 @@ const SearchResults = ({ countriesToShow }) => {
 
 const App = () => {
   const [countries, setCountries] = useState([])
-  const [countriesToShow, setCountriesToShow] = useState([])
-  const [search, setSearch] = useState('')
+  const [searchTerms, setSearchTerms] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
   useEffect(() => {
     axios
@@ -70,18 +89,18 @@ const App = () => {
   }, [])
 
   const handleSearchChange = (event) => {
-    setSearch(event.target.value)
+    setSearchTerms(event.target.value)
   }
 
   const searchCountry = (event) => {
     event.preventDefault()
-    setCountriesToShow(countries.filter(country => country.name.toLowerCase().indexOf(search.toLocaleLowerCase()) !== -1))
+    setSearchResults(countries.filter(country => country.name.toLowerCase().indexOf(searchTerms.toLocaleLowerCase()) !== -1))
   }
 
   return (
     <div>
-      <CountrySearch handleSubmit={searchCountry} search={search} handleSearchChange={handleSearchChange} />
-      <SearchResults countriesToShow={countriesToShow} />
+      <CountrySearch handleSubmit={searchCountry} searchTerms={searchTerms} handleSearchChange={handleSearchChange} />
+      <SearchResults searchResults={searchResults} />
     </div>
   )
 }
