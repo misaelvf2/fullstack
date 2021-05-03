@@ -13,14 +13,12 @@ const CountrySearch = (props) => {
 }
 
 const Country = (props) => {
-  console.log(`Inside Country ${props.country.name}`)
   const [weather, setWeather] = useState('')
 
   useEffect(() => {
     axios
       .get(`http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${props.country.capital}`)
       .then(response => {
-        console.log(`Getting weather for ${props.country.name}`)
         setWeather(response.data.current)
       })
   }, [props.country])
