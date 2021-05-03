@@ -13,21 +13,59 @@ const CountrySearch = (props) => {
 }
 
 const Country = (props) => {
-  return (
-    <div>
-      <h2>{props.country.name}</h2>
-      <div>capital {props.country.capital}</div>
-      <div>population {props.country.population}</div>
+  console.log(`Inside Country ${props.country.name}`)
+  const [weather, setWeather] = useState('')
 
-      <h3>languages</h3>
-      <ul>
-        {props.country.languages.map(language =>
-          <li key={language.name}>{language.name}</li>
-        )}
-      </ul>
-      <img src={props.country.flag} height="100px" weight="100px" alt="Flag" />
-    </div>
-  )
+  useEffect(() => {
+    axios
+      .get(`http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${props.country.capital}`)
+      .then(response => {
+        console.log(`Getting weather for ${props.country.name}`)
+        setWeather(response.data.current)
+      })
+  }, [props.country])
+
+  if (weather) {
+    return (
+      <div>
+        <h2>{props.country.name}</h2>
+        <div>capital {props.country.capital}</div>
+        <div>population {props.country.population}</div>
+
+        <h3>languages</h3>
+        <ul>
+          {props.country.languages.map(language =>
+            <li key={language.name}>{language.name}</li>
+          )}
+        </ul>
+        <img src={props.country.flag} height="100px" weight="100px" alt="Flag" />
+
+        <h3>Weather in {props.country.capital}</h3>
+        <b>temperature: </b>{weather.temperature} Celsius
+        <div><img src={weather.weather_icons} alt={weather.weather_descriptions}/></div>
+        <div><b>wind: </b>{weather.wind_speed} mph direction {weather.wind_dir}</div>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2>{props.country.name}</h2>
+        <div>capital {props.country.capital}</div>
+        <div>population {props.country.population}</div>
+
+        <h3>languages</h3>
+        <ul>
+          {props.country.languages.map(language =>
+            <li key={language.name}>{language.name}</li>
+          )}
+        </ul>
+        <img src={props.country.flag} height="100px" weight="100px" alt="Flag" />
+
+        <h3>Weather in {props.country.capital}</h3>
+        <b>temperature: </b> Celsius
+      </div>
+    )
+  }
 }
 
 const SearchResults = ({ searchResults }) => {
