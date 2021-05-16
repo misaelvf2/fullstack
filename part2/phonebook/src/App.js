@@ -37,6 +37,19 @@ const App = () => {
     setPersonsToShow(persons.filter(person => person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1))
   }
 
+  const deletePerson = (name, id) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
+        .del(id)
+        .then(() => {
+          setPersons(persons.filter(n => n.id !== id))
+          setPersonsToShow(persons.filter(n => n.id !== id))
+        })
+    } else {
+      console.log('Cancelling')
+    }
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -74,7 +87,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleDelete={deletePerson} />
     </div>
   )
 }
