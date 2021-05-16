@@ -5,7 +5,7 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
@@ -49,11 +49,14 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      const newPersons = persons.concat(personObject)
-      setPersons(newPersons)
-      setNewName('')
-      setNewNumber('')
-      setPersonsToShow(newPersons)
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setPersonsToShow(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
