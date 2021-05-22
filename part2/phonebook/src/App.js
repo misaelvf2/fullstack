@@ -4,12 +4,36 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personService from './services/persons'
 
+const Notification = ({ message, type }) => {
+  if (message == null) {
+    return null
+  }
+
+  if (type === 'error') {
+    return (
+      <div className="error">
+        {message}
+      </div>
+    )
+  }
+
+  if (type === 'success') {
+    return (
+      <div className="success">
+        {message}
+      </div>
+    )
+  }
+}
+
 const App = () => {
   const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
   const [ personsToShow, setPersonsToShow ] = useState([])
+  const [ successMessage, setSuccessMessage ] = useState()
+  const [ errorMessage, setErrorMessage ] = useState()
 
   useEffect(() => {
     personService
@@ -67,6 +91,17 @@ const App = () => {
             setPersonsToShow(personsToShow.map(p => p.id !== person.id ? p : returnedPerson))
             setNewName('')
             setNewNumber('')
+
+            setSuccessMessage(`Updated ${personObject.name}`)
+            setTimeout(() => {
+              setSuccessMessage()
+            }, 5000);
+          })
+          .catch(error => {
+            setErrorMessage(`Information of ${person.name} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage()
+            }, 5000);
           })
       }
     }
@@ -82,6 +117,11 @@ const App = () => {
           setPersonsToShow(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+
+          setSuccessMessage(`Added ${personObject.name}`)
+          setTimeout(() => {
+            setSuccessMessage()
+          }, 5000);
         })
     }
   }
@@ -89,6 +129,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={successMessage} type="success"/>
+      <Notification message={errorMessage} type="error"/>
 
       <Filter handleSubmit={searchPerson} search={search} handleSearchChange={handleSearchChange} />
 
