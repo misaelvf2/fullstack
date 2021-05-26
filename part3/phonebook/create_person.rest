@@ -1,0 +1,25 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Misael Valentin",
+  "number": "240-709-9479"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Ashley Villanueva",
+  "number": "787-689-7620"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Misael Valentin",
+  "number": "787-373-1274"
+}
